@@ -18,11 +18,27 @@ composer update
 ```
 
 # 基本用法
-生成缩略图
+1) 生成一张缩略图
 ```
     $src = './public/upload/img_12.jpg'; // 原图路径
     $output = './public/upload/img_12_thumb.jpg'; // 输出保存文件名
     $width = 300; // 预生成缩略图的宽
     $height = 200; // 预生成缩略图的高
-    \Thumb\Thumb::make($src,$output,$width,$height);
+    \Thumb\Thumb::out($src,$output,$width,$height);
 ```
+2) 生成缩略图直接输出图象到浏览器
+```
+    $src = './public/upload/img_12.jpg'; // 原图路径
+    $width = 300; // 预生成缩略图的宽
+    $height = 200; // 预生成缩略图的高
+    \Thumb\Thumb::show($src,$width,$height);
+```
+3) 生成缩略图直接输出图象到浏览器并保存缩略图
+```
+    $src = './public/upload/img_12.jpg'; // 原图路径
+    $output = './public/upload/img_12_thumb.jpg'; // 输出保存文件名
+    $width = 300; // 预生成缩略图的宽
+    $height = 200; // 预生成缩略图的高
+    \Thumb\Thumb::showOut($src,$output,$width,$height);
+```
+
