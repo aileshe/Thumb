@@ -9,7 +9,6 @@
             "email": "673008865@qq.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php":">=5.3"
     },
