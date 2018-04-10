@@ -14,26 +14,73 @@
  |________________|  |________________|  |________________|
 
  */
-# \Thumb\Thumb::make([原图路径],[缩略图输出路径],[缩略图宽度],[缩略图高度],[middle|top|bottom]);
+
 namespace Thumb;
 
 class Thumb{
+    private static $img_type; # 原图片格式
+    
     /**
-     * 缩略图生成出口函数
+     * 输出图象到浏览器
+     * @param  String  $filename  原图路径
+     * @param  String  $width     预生成缩略图宽度
+     * @param  String  $height    预生成缩略图高度
+     * @param  String  $valign    [middle|top|bottom],默认 居中
+     */
+    public static function show($filename, $width, $height, $valign='middle'){
+        $thumb = self::make($filename, $width, $height, $valign);
+        header('Content-Type:image/'.self::$img_type);
+        echo $thumb;
+    }
+    
+    /**
+     * 保存缩略图文件
      * @param  String  $filename  原图路径
      * @param  String  $output    缩略图输出路径
      * @param  String  $width     预生成缩略图宽度
      * @param  String  $height    预生成缩略图高度
      * @param  String  $valign    [middle|top|bottom],默认 居中
      */
-    public static function make($filename,$output,$width,$height,$valign='middle'){
+    public static function out($filename, $output, $width, $height, $valign='middle'){
+        $thumb = self::make($filename, $width, $height, $valign);
+        $fh = fopen($output, 'wb'); # 二进制文件
+        fwrite($fh,$thumb);
+        fclose($fh);
+    }
+    
+    /**
+     * 输出图象到浏览器并保存缩略图文件
+     * @param  String  $filename  原图路径
+     * @param  String  $output    缩略图输出路径
+     * @param  String  $width     预生成缩略图宽度
+     * @param  String  $height    预生成缩略图高度
+     * @param  String  $valign    [middle|top|bottom],默认 居中
+     */
+    public static function showOut($filename, $output, $width, $height, $valign='middle'){
+        $thumb = self::make($filename, $width, $height, $valign);
+        $fh = fopen($output, 'wb'); # 二进制文件
+        fwrite($fh,$thumb);
+        fclose($fh);
+        header('Content-Type:image/'.self::$img_type);
+        echo $thumb;
+    }
+    
+    /**
+     * 缩略图生成函数
+     * @param  String  $filename  原图路径
+     * @param  String  $width     预生成缩略图宽度
+     * @param  String  $height    预生成缩略图高度
+     * @param  String  $valign    [middle|top|bottom],默认 居中
+     * @return FileString         原始图象流
+     */
+    private static function make($filename,$width,$height,$valign='middle'){
         ini_set('gd.jpeg_ignore_warning',true);
         $filetype=array(1=>'gif',2=>'jpeg',3=>'png');
         # 获取图片信息
         $imginfo=getimagesize($filename);
         $img_w=$imginfo[0];
         $img_h=$imginfo[1];
-        $img_type=$filetype[$imginfo[2]];
+        self::$img_type=$filetype[$imginfo[2]];
     
     
         $thumb_h=$height; # 固定背景画布的高度
@@ -48,7 +95,7 @@ class Thumb{
         }
     
         # 载入要缩放的图片
-        $loadimg='imagecreatefrom'.$img_type;
+        $loadimg='imagecreatefrom'.self::$img_type;
         $tmp_img=$loadimg($filename);
     
     
@@ -76,11 +123,14 @@ class Thumb{
     
         ob_clean();
         # 展示图片
-        //header("Content-Type:image/{$img_type}");
-        $showimg='image'.$img_type;
-        $showimg($thumb,$output); # $output 图片文件输出路径
+        ob_start();
+        $showimg='image'.self::$img_type;
+        $showimg($thumb); # 输出原始图象流
+        $thumb_img = ob_get_clean();
+        
         # 释放资源
         imagedestroy($tmp_img);
         imagedestroy($thumb);
+        return $thumb_img;
     }
 }
