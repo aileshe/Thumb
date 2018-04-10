@@ -1,0 +1,21 @@
+{
+    "name": "aileshe/thumb",
+    "description": "Thumbnail generator",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dejan",
+            "email": "673008865@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php":">=5.3"
+    },
+    "autoload":{
+        "psr-4":{
+            "Thumb\\":"src/Thumb"
+        }
+    }
+}
