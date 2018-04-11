@@ -62,4 +62,5 @@ composer update
 \Thumb\Thumb::showOut([原图路径],[缩图文件名],[缩略图宽],[缩略图高],[middle|top|bottom]);
 
 ```
-
+# 联系
+QQ : 673008865   Dejan
